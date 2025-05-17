@@ -1,4 +1,4 @@
-#include<bits/stdc++.h>
+/*#include<bits/stdc++.h>
 using namespace std;
 
 
@@ -27,4 +27,57 @@ int main()
   cout<<"y="<<y<<endl;
   cout<<"z="<<z<<endl; 
     return 0;
+}*/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int main()
+{    int n;
+    cout << "Enter number of equations: ";
+    cin >> n;
+    vector<vector<double>> coeff(n, vector<double>(n+1));
+    vector<double> x(n, 0);     // Current solution
+    vector<double> prev_x(n);   // Previous iteration solution
+    
+    // Input coefficients
+    for (int i = 0; i < n; i++) {
+        cout << "Coefficients of Equation " << i+1 << " (including constant term): ";
+        for (int j = 0; j <= n; j++) {
+            cin >> coeff[i][j];
+        }
+    }
+        cout << "Enter initial values of variables: ";
+        for (int i = 0; i < n; i++) {
+            cin >> x[i];
+        }
+    // Define convergence criterion
+    double epsilon = 0.0000001; 
+    // Gauss-Seidel iterations
+    bool converged = false;
+    while (!converged ) {
+        // Save previous values
+        prev_x = x;
+        // Update each variable using the Gauss-Seidel update formula
+        for (int i = 0; i < n; i++) {
+            double sum = coeff[i][n]; // The constant term    
+            for (int j = 0; j < n; j++) {
+                if (j != i) {
+                    sum -= coeff[i][j] * x[j];
+                }
+            }   
+            x[i] = sum / coeff[i][i];
+        }// Check convergence
+        converged = true;
+        for (int i = 0; i < n; i++) {
+            if (abs(x[i] - prev_x[i]) > epsilon) {
+                converged = false;
+                break;
+            }
+        }
+    } 
+        for (int i = 0; i < n; i++) {
+            cout << "x" << i+1 << " = " << x[i] << endl;
+        }
+return 0;
 }
